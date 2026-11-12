@@ -1,0 +1,16 @@
+# Mỗi thư mục con có .gitignore riêng: Code/.gitignore (Python), Unity/.gitignore (Unity)
+
+# Python venv để ở gốc, dùng chung cho Code/
+.venv/
+venv/
+.env
+
+# Video demo xuất ra (để nhầm ở gốc)
+demo_out/
+
+# Hệ điều hành / IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.vs/
+.idea/

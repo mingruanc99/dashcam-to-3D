@@ -1,0 +1,60 @@
+# Unity tự sinh lại khi mở project: KHÔNG push
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# File project của IDE, Unity tự tạo lại
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Build / crash
+*.apk
+*.aab
+*.unitypackage
+crashlytics-build.properties
+sysinfo.txt
+
+# Asset mua trên Asset Store: giấy phép KHÔNG cho phép đăng công khai.
+# Người clone về phải tự import RCC Pro từ Package Manager > My Assets.
+/[Aa]ssets/Realistic Car Controller Pro/
+/[Aa]ssets/Realistic Car Controller Pro.meta
+
+# Video dashcam (bản quyền của kênh gốc, lại nặng)
+/[Aa]ssets/StreamingAssets/*.mp4
+/[Aa]ssets/StreamingAssets/*.mp4.meta
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Đồ có sẵn trong template URP, project không dùng tới (đã kiểm GUID: không scene/setting nào tham chiếu)
+/[Aa]ssets/TutorialInfo/
+/[Aa]ssets/TutorialInfo.meta
+/[Aa]ssets/Readme.asset
+/[Aa]ssets/Readme.asset.meta
+/[Aa]ssets/Scenes/SampleScene.unity
+/[Aa]ssets/Scenes/SampleScene.unity.meta
+# TextMesh Pro: không script/scene nào dùng; cần thì Window > TextMeshPro > Import TMP Essential Resources
+/[Aa]ssets/TextMesh Pro/
+/[Aa]ssets/TextMesh Pro.meta

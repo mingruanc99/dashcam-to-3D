@@ -1,0 +1,13 @@
+# torch/torchvision cài riêng theo GPU (RTX 50xx cần CUDA 12.8):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+ultralytics>=8.3
+av>=12
+numpy
+scipy
+pandas
+pyarrow
+jsonschema
+lap
+matplotlib
+pyyaml
+pytest

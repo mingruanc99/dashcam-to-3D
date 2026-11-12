@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "adastest/scenario/0.1",
+  "title": "Scenario",
+  "description": "Kịch bản trung gian giữa pipeline và simulator (PLAN.md mục 4). Đơn vị: mét, giây, radian. x tiến, y trái, yaw ngược chiều kim đồng hồ tính từ trục x.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "meta",
+    "map",
+    "ego",
+    "agents"
+  ],
+  "$defs": {
+    "xy": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "size": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "state": {
+      "type": "object",
+      "required": [
+        "t",
+        "x",
+        "y",
+        "yaw",
+        "v"
+      ],
+      "properties": {
+        "t": {
+          "type": "number"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "yaw": {
+          "type": "number"
+        },
+        "v": {
+          "type": "number"
+        }
+      }
+    },
+    "trajectory": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/state"
+      },
+      "minItems": 2
+    },
+    "agent": {
+      "type": "object",
+      "required": [
+        "id",
+        "class",
+        "size",
+        "trajectory"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        },
+        "class": {
+          "enum": [
+            "car",
+            "suv",
+            "truck",
+            "bus",
+            "motorbike",
+            "bicycle",
+            "pedestrian"
+          ]
+        },
+        "variant": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "$ref": "#/$defs/size"
+        },
+        "trajectory": {
+          "$ref": "#/$defs/trajectory"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "behavior": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "log_replay",
+                "reactive"
+              ]
+            },
+            "reactive_fallback": {
+              "enum": [
+                "idm",
+                "none"
+              ]
+            }
+          }
+        },
+        "posture": {
+          "enum": [
+            "normal",
+            "down"
+          ]
+        },
+        "inferred": {
+          "type": "boolean",
+          "description": "true: suy ra, không đo được"
+        }
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "source",
+        "fps",
+        "duration"
+      ],
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "frame": {
+          "enum": [
+            "enu",
+            "ego_t0"
+          ],
+          "description": "enu: có GPS, x=Đông, y=Bắc. ego_t0: không GPS, trục x là hướng xe lúc t=0."
+        },
+        "origin_gps": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/xy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "duration": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "video_start": {
+          "type": "number"
+        },
+        "speed_limit": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "camera": {
+          "type": "object"
+        }
+      }
+    },
+    "map": {
+      "type": "object",
+      "required": [
+        "lanes"
+      ],
+      "properties": {
+        "lanes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "centerline",
+              "width"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "centerline": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/xy"
+                },
+                "minItems": 2
+              },
+              "width": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "left": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "right": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "direction": {
+                "enum": [
+                  1,
+                  -1
+                ],
+                "description": "+1 cùng chiều ego, −1 ngược chiều (planner không đổi sang)"
+              }
+            }
+          }
+        },
+        "road_edges": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/xy"
+            }
+          }
+        },
+        "signs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "pos"
+            ],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "pos": {
+                "$ref": "#/$defs/xy"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ego": {
+      "type": "object",
+      "required": [
+        "size",
+        "trajectory"
+      ],
+      "properties": {
+        "size": {
+          "$ref": "#/$defs/size"
+        },
+        "trajectory": {
+          "$ref": "#/$defs/trajectory"
+        }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agent"
+      }
+    },
+    "traffic_lights": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "pos",
+          "states"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "pos": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 3
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "enum": [
+                    "red",
+                    "yellow",
+                    "green",
+                    "unknown"
+                  ]
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "description": "Chèn thêm tình huống mà không sửa log (PLAN.md mục 4, mode M4).",
+      "items": {
+        "type": "object",
+        "required": [
+          "t",
+          "type"
+        ],
+        "properties": {
+          "t": {
+            "type": "number"
+          },
+          "type": {
+            "enum": [
+              "spawn_agent",
+              "remove_agent"
+            ]
+          },
+          "agent": {
+            "$ref": "#/$defs/agent"
+          },
+          "agent_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "static_obstacles": {
+      "type": "array",
+      "description": "Vật cản tĩnh nhỏ (YOLO26+SAHI của buildphase). hazard=true (cao >= 23 cm) thì sim tính va chạm.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "pos",
+          "size",
+          "hazard"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "class": {
+            "const": "obstacle"
+          },
+          "pos": {
+            "$ref": "#/$defs/xy"
+          },
+          "size": {
+            "$ref": "#/$defs/size"
+          },
+          "hazard": {
+            "type": "boolean"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "hits": {
+            "type": "integer"
+          },
+          "first_seen": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "npcs": {
+      "type": "array",
+      "description": "NPC hành động theo điều kiện so với ego (sim/director.py)",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "class",
+          "size",
+          "lane",
+          "s0"
+        ]
+      }
+    }
+  }
+}

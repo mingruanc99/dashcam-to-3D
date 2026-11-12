@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Adas_clip02.unity
+    guid: 8b7c680b1c0659d4ca8ce742af575407
+  - enabled: 1
+    path: Assets/Scenes/Adas_lead_brake.unity
+    guid: 9731546cafecdcc4db030ba78ea2cff0
+  - enabled: 1
+    path: Assets/Scenes/Adas_jaywalker.unity
+    guid: bc920e56bacc8744c921c33b90f70d4f
+  - enabled: 1
+    path: Assets/Scenes/Adas_lead_brake_RCC.unity
+    guid: 44e309daf38f17744a03e5c5a98fa177
+  - enabled: 1
+    path: Assets/Scenes/Adas_clip02_RCC.unity
+    guid: 102f0e78b9618f342b0a7c60df782d54
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
